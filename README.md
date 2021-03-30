@@ -1,2 +1,2 @@
 # electron-markdown
-Desktop ElectronJS app to view/edit markdown files
+Desktop ElectronJS project to view/edit markdown files

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+	<meta charset="UTF-8">
+	<title>Search Window</title>
+
+<style>
+html,body {
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+*, *:before, *:after { box-sizing: inherit; }
+
+
+#searchbox {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	font-size: 14px;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 0 3px rgba(0,0,0,0.1);
+	border: 1px solid #e0e0e0;
+}
+#searchbox input {
+	flex: 1 1 40px;
+	border: none;
+	margin: .5em;
+	color: #555;
+	font-size: 100%;
+	min-width: 40px;
+}
+#searchbox input:focus {
+	outline: none;
+}
+#searchbox .buttons {
+	border-left: 1px solid #e0e0e0;
+	margin: .5em;
+	padding-left: .5em;
+	display: flex;
+	align-items: center;
+}
+#searchbox .btn {
+	display: inline-block;
+	font-style: normal;
+	width: 1.5em; 
+	height: 1.5em;
+	border-radius: 50%;
+	margin: .3em;
+	white-space: nowrap;
+}
+#searchbox .btn:hover {
+	background-color: #e7e7e7;
+}
+#searchbox .info {
+	color: #777;
+	font-size: 90%;
+	cursor: default;
+}
+#searchbox .buttons svg {
+	stroke: #555;
+	fill: none;
+}
+#search_results {
+	min-width: 50px;
+	text-align: right;
+	user-select: none;
+}
+</style>	
+</head>
+
+<body>
+	<div id="searchbox">
+		<input type="text" id="search">
+		<div class="info" id="search_results">0/0</div>
+		<div class="buttons">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+			class="btn" onclick="searchForward(false)"
+			><path d="M8,14  l4,-4 l4,4"></path></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+			class="btn" onclick="searchForward(true)"
+			><path d="M8,10 l4,4 l4,-4"></path></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" 
+			class="btn" onclick="closeSearch()"
+			><path d="M8,8 l8,8 M16,8 l-8,8"></path></svg></div>
+	</div>
+
+	<script>
+		const {ipcRenderer: ipc} = require("electron");
+		var inputBox = document.getElementById('search');
+		var searchRes = document.getElementById("search_results");
+		//Window behavior (focus, keydown events)
+		window.addEventListener('focus', ev => {
+			inputBox.focus();
+		});
+		window.addEventListener('keydown', ev => {
+			switch(ev.code) {
+				case "Escape": ipc.send('hide-search-window'); break;
+				case "Enter": ipc.send('find-text', JSON.stringify({forward: true, data: inputBox.value})); break;
+				case "F4": if(ev.altKey) ipc.send('close-window'); break;
+			}
+		});
+		//InputBox functionality (buttons, input, etc.)
+		inputBox.addEventListener('input', ev => {
+			if(inputBox.value) {
+				ipc.send('find-text', JSON.stringify({forward: true, data: inputBox.value}));
+			} else {
+				ipc.send('cancel-search');
+				searchRes.innerHTML = "0/0";
+			}
+		});
+		ipc.on('search-result', (ev, data) => {
+			if(data) var json = JSON.parse(data);
+			searchRes.innerHTML = json.current + "/" + json.matches;
+		})
+		function closeSearch() {
+			ipc.send('hide-search-window');
+		}
+		function searchForward(forward) {
+			var data = JSON.stringify({forward: forward, data: inputBox.value});
+			if(inputBox.value) ipc.send('find-text', data);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+1) markdown link target:
+electron.exe \markdown\dir\ @file_with_args
+
+file_with_args:
+---------------
+arg1
+arg2
+arg3
+---------------
+
+//In markdown app.
+//Everything that's after @ is a filename
+//Read args from that filename
+
+2) AppLauncher (markdown.exe) launcher.config:
+markdown.exe markdown.lnk @
+
+//In AppLauncher.
+//Everything after @ should be written into file_with_args

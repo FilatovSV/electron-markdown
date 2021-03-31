@@ -1,5 +1,4 @@
 # electron-markdown
-<<<<<<< HEAD
 
 ## Description
 
@@ -29,7 +28,7 @@ Supports shortcuts:
 
 1. Search `(Ctrl+F)` - searches text, works separately for both viewer and editor windows
 
-<div style="display: flex; flex-direction: row; max-width: 400px">
+<div style="display: flex; flex-direction: row; max-width: 200px">
 	<img src="./view_search_xmpl.png" />
 	<img src="./edit_search_xmpl.png" />
 </div>
@@ -42,6 +41,3 @@ Supports shortcuts:
 
 
 ***
-=======
-Desktop ElectronJS project to view/edit markdown files
->>>>>>> f1679d8d39f1c071efac00012bb75e33c5f670d4

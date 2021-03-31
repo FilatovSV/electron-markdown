@@ -28,7 +28,7 @@ Supports shortcuts:
 
 1. Search `(Ctrl+F)` - searches text, works separately for both viewer and editor windows
 
-<div style="display: flex; flex-direction: row; max-width: 200px">
+<div style="display: flex; flex-direction: row; max-width: 400px">
 	<img src="./view_search_xmpl.png" />
 	<img src="./edit_search_xmpl.png" />
 </div>
